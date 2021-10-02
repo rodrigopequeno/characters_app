@@ -3,6 +3,18 @@ description: A new Flutter project.
 publish_to: 'none'
 version: 1.0.0+1
 
+## Slidy Scripts 
+vars:
+  clean: flutter clean
+  get: flutter pub get
+  runner: flutter pub run build_runner
+
+scripts:
+  build: $runner build
+  watch: $clean & $get & $runner watch
+  watch_clean: $clean & $get & $runner watch
+  build_clean: $clean & $get & $runner build --delete-conflicting-outputs
+
 environment:
   sdk: ">=2.12.0 <3.0.0"
 
@@ -12,10 +24,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   dartz: ^0.10.0
   dio: ^4.0.0
+  equatable: ^2.0.3
   flutter:
     sdk: flutter
   flutter_mobx: ^2.0.2
   flutter_modular: ^4.1.0
+  internet_connection_checker: ^0.0.1+2
   mobx: ^2.0.4
 
 dev_dependencies:

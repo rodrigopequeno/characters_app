@@ -1,7 +1,9 @@
 include: package:lint/analysis_options.yaml
 
 analyzer:
-   plugins:
+  exclude:
+    - lib/**/**.g.dart
+  plugins:
      - dart_code_metrics
      
 linter:
@@ -28,7 +30,7 @@ dart_code_metrics:
     - test/reporters/**
     - test/utils/**
     - test/resources/*
-    - test/*
+    - test/**
   rules:
     - avoid-unused-parameters
     - binary-expression-operand-order
