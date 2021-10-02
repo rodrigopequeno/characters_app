@@ -1,16 +1,16 @@
-# characters_app
+# Characters App
 
-A new Flutter project.
+Projeto desenvolvido como Desafio Técnico de Flutter para a empresa [SoftDesign](https://softdesign.com.br/).
 
-## Getting Started
+API:
+    [Marvel Developer Portal](https://developer.marvel.com/)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Requisitos:
+1) Lista de Personagens
+    - Listar personagens exibindo seus respectivos nomes e fotos.
+    - A lista deve possuir paginação infinita.
+    - Ao clicar em um personagem exibir uma tela com detalhes.
+    
+2) Tela de Detalhes do Personagem
+    - Exibir mais detalhes do personagem com as seguintes informações: Foto, nome, descrição.
+    - Exibir uma lista de quadrinhos em que o personagem tenha participado.
