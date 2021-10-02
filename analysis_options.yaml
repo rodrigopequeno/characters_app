@@ -1,11 +1,14 @@
-include: package:flutter_lints/flutter.yaml
+include: package:lint/analysis_options.yaml
 
 analyzer:
    plugins:
      - dart_code_metrics
+     
 linter:
   rules:
-  
+    public_member_api_docs: false
+    prefer_relative_imports: true
+
 dart_code_metrics:
   anti-patterns:
     - long-method
