@@ -1,13 +1,11 @@
-import 'package:characters_app/app/features/character/domain/entities/response_character.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../entities/character.dart';
+import '../entities/response_character.dart';
 import '../repositories/character_repository.dart';
 
-class GetCharacters
-    implements UseCase<ResponseCharacter, GetCharactersParams> {
+class GetCharacters implements UseCase<ResponseCharacter, GetCharactersParams> {
   final CharacterRepository repository;
 
   GetCharacters(this.repository);

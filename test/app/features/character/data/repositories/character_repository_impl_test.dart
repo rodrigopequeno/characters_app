@@ -8,7 +8,6 @@ import 'package:characters_app/app/features/character/data/models/comics_model.d
 import 'package:characters_app/app/features/character/data/models/response_character_model.dart';
 import 'package:characters_app/app/features/character/data/models/thumbnail_model.dart';
 import 'package:characters_app/app/features/character/data/repositories/character_repository_impl.dart';
-import 'package:characters_app/app/features/character/domain/entities/character.dart';
 import 'package:characters_app/app/features/character/domain/entities/response_character.dart';
 import 'package:characters_app/app/features/character/domain/repositories/character_repository.dart';
 import 'package:dartz/dartz.dart';

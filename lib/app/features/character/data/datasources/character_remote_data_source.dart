@@ -1,6 +1,6 @@
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/service/service.dart';
-import '../models/character_model.dart';
+
 import '../models/response_character_model.dart';
 
 abstract class CharacterRemoteDataSource {
@@ -22,15 +22,7 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
     int? offset,
     bool next = false,
   }) async {
-    int _offset;
-
-    if (_responseCharacterModel == null && offset == null) {
-      _offset = 0;
-    } else if (offset == null && next) {
-      _offset = _responseCharacterModel!.nextOffset;
-    } else {
-      _offset = offset ?? 0;
-    }
+    final _offset = _isNextPage(offset, next);
 
     try {
       final response = await service.get(
@@ -48,6 +40,16 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
       }
     } on ServiceException {
       throw ServerException();
+    }
+  }
+
+  int _isNextPage(int? offset, bool next) {
+    if (_responseCharacterModel == null && offset == null) {
+      return 0;
+    } else if (_responseCharacterModel != null && offset == null && next) {
+      return _responseCharacterModel!.nextOffset;
+    } else {
+      return offset ?? 0;
     }
   }
 }

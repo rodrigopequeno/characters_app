@@ -1,9 +1,8 @@
-import 'package:characters_app/app/features/character/domain/entities/response_character.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
 import '../../domain/entities/character.dart';
+import '../../domain/entities/response_character.dart';
 import '../../domain/usecases/get_characters.dart';
 
 part 'characters_controller.g.dart';
@@ -54,15 +53,19 @@ abstract class _CharactersControllerBase with Store {
     _charactersError = newValue;
   }
 
-  Future<void> loadCharacters() async {
-    setCharactersLoading(true);
+  Future<void> loadCharacters({bool isRefresh = false}) async {
+    if (!isRefresh) {
+      setCharactersLoading(true);
+    }
     setCharactersError("");
     final characters = await getCharacters(GetCharactersParams());
     characters.fold(
       ifThereWasError,
       setCharacters,
     );
-    setCharactersLoading(false);
+    if (!isRefresh) {
+      setCharactersLoading(false);
+    }
   }
 
   @action
@@ -103,7 +106,7 @@ abstract class _CharactersControllerBase with Store {
   }
 
   void ifThereWasError(Failure failure) {
-    if (failure is ServerException) {
+    if (failure is ServerFailure) {
       setCharactersError("An error has occurred, check your connection");
     } else if (failure is NoInternetConnectionFailure) {
       setCharactersError(

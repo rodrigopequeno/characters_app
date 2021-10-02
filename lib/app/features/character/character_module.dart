@@ -42,7 +42,7 @@ class CharacterModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(
-      '/',
+      CharactersPage.routerName,
       child: (_, args) => const CharactersPage(),
     ),
   ];

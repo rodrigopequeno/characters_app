@@ -1,10 +1,9 @@
-import 'package:characters_app/app/features/character/domain/entities/response_character.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domain/entities/character.dart';
+import '../../domain/entities/response_character.dart';
 import '../../domain/repositories/character_repository.dart';
 import '../datasources/character_remote_data_source.dart';
 
@@ -24,8 +23,10 @@ class CharacterRepositoryImpl implements CharacterRepository {
   }) async {
     if (await networkInfo.isConnected) {
       try {
-        final remotePosts =
-            await characterRemoteDataSource.getCharacters(offset: offset, next: next);
+        final remotePosts = await characterRemoteDataSource.getCharacters(
+          offset: offset,
+          next: next,
+        );
 
         return Right(remotePosts);
       } on ServerException {

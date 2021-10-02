@@ -1,4 +1,3 @@
-import 'package:characters_app/app/features/character/data/models/response_character_model.dart';
 import 'package:characters_app/app/features/character/domain/entities/character.dart';
 import 'package:characters_app/app/features/character/domain/entities/comic.dart';
 import 'package:characters_app/app/features/character/domain/entities/comics.dart';

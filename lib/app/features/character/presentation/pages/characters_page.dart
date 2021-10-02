@@ -6,6 +6,7 @@ import '../controllers/characters_controller.dart';
 import '../widgets/character_tile.dart';
 
 class CharactersPage extends StatefulWidget {
+  static const routerName = "/";
   const CharactersPage({Key? key}) : super(key: key);
 
   @override
@@ -33,7 +34,7 @@ class _CharactersPageState
 
   Widget _buildBody() {
     return RefreshIndicator(
-      onRefresh: controller.loadCharacters,
+      onRefresh: () => controller.loadCharacters(isRefresh: true),
       child: Observer(
         builder: (_) {
           if (controller.charactersLoading) {

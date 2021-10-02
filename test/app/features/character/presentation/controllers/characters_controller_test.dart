@@ -11,6 +11,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mobx/mobx.dart' as mobx;
 import 'package:mocktail/mocktail.dart';
 
+abstract class Callable<T> {
+  void call([T? arg]);
+}
+
+class MockCallable<T> extends Mock implements Callable<T> {}
+
 class MockGetCharacters extends Mock implements GetCharacters {}
 
 void main() {
@@ -76,73 +82,86 @@ void main() {
     test(
       'should emit loading and return the update the data when getting characters successfully',
       () async {
-        final changedCharactersLoading = <bool>[];
-        final changedCharacters = <int>[];
+        //arrange
+        final changedCharactersLoading = MockCallable<bool>();
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Right(tResponseCharacters));
         mobx.reaction<bool>(
           (_) => controller.charactersLoading,
-          (newValue) => changedCharactersLoading.add(newValue),
-        );
-        mobx.reaction<List>(
-          (_) => controller.characters,
-          (newValue) => changedCharacters.add(newValue.length),
+          (newValue) => changedCharactersLoading(newValue),
         );
         //act
-        controller.loadCharacters();
+        await controller.loadCharacters();
         await untilCalled(() => mockGetCharacters(any()));
         //verify
-        expect(changedCharactersLoading, [true, false]);
-        expect(changedCharacters.length, tCharactersModel.length);
+        verifyInOrder([
+          () => changedCharactersLoading(true),
+          () => changedCharactersLoading(false),
+        ]);
+        expect(controller.characters, tCharactersModel);
       },
     );
 
     test(
       'should emit loading and error when getting data fails',
       () async {
-        final changedCharactersLoading = <bool>[];
-        final changedCharactersError = <String>[];
+        //arrange
+        final changedCharactersLoading = MockCallable<bool>();
+        final changedCharactersError = MockCallable<String>();
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Left(ServerFailure()));
         mobx.reaction<bool>(
           (_) => controller.charactersLoading,
-          (newValue) => changedCharactersLoading.add(newValue),
+          (newValue) => changedCharactersLoading(newValue),
         );
         mobx.reaction<String>(
           (_) => controller.charactersError,
-          (newValue) => changedCharactersError.add(newValue),
+          (newValue) => changedCharactersError(newValue),
         );
         //act
         controller.loadCharacters();
         await untilCalled(() => mockGetCharacters(any()));
         //verify
-        expect(changedCharactersLoading, [true, false]);
-        expect(changedCharactersError.length, 1);
+        verifyInOrder([
+          () => changedCharactersLoading(true),
+          () => changedCharactersLoading(false),
+        ]);
+        verifyInOrder([
+          () => changedCharactersError(
+                "An error has occurred, check your connection",
+              ),
+        ]);
       },
     );
 
     test(
       'should emit loading and error with a proper message for the error when getting data fails',
       () async {
-        final changedCharactersLoading = <bool>[];
-        final changedCharactersError = <String>[];
+        //arrange
+        final changedCharactersLoading = MockCallable<bool>();
+        final changedCharactersError = MockCallable<String>();
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Left(NoInternetConnectionFailure()));
         mobx.reaction<bool>(
           (_) => controller.charactersLoading,
-          (newValue) => changedCharactersLoading.add(newValue),
+          (newValue) => changedCharactersLoading(newValue),
         );
         mobx.reaction<String>(
           (_) => controller.charactersError,
-          (newValue) => changedCharactersError.add(newValue),
+          (newValue) => changedCharactersError(newValue),
         );
         //act
         controller.loadCharacters();
         await untilCalled(() => mockGetCharacters(any()));
         //verify
-        expect(changedCharactersLoading, [true, false]);
-        expect(changedCharactersError, [
-          'You have no internet access, check your connection',
+        verifyInOrder([
+          () => changedCharactersLoading(true),
+          () => changedCharactersLoading(false),
+        ]);
+        verifyInOrder([
+          () => changedCharactersError(
+                'You have no internet access, check your connection',
+              ),
         ]);
       },
     );
