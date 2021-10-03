@@ -36,7 +36,7 @@ void main() {
           125,
           37,
         ];
-        const timestamp = "2021-10-02 17:05:09.026220";
+        final timestamp = generateHashImpl.timestamp;
         final tHashConvert = Digest(bytes);
         when(() => mockHash.convert(any())).thenAnswer((_) => tHashConvert);
         final result = generateHashImpl(timestamp);

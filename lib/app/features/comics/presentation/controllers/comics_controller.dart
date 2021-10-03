@@ -61,7 +61,7 @@ abstract class _ComicsControllerBase with Store {
     setComicsError("");
     final comics = await getComics(GetComicsParams(characterId: characterId));
     comics.fold(
-      ifThereWasError,
+      (l) => ifThereWasError(l, setComicsError),
       setComics,
     );
     if (!isRefresh) {
@@ -101,21 +101,21 @@ abstract class _ComicsControllerBase with Store {
     final comics =
         await getComics(GetComicsParams(next: true, characterId: characterId));
     comics.fold(
-      ifThereWasError,
+      (l) => ifThereWasError(l, setComicsNextError),
       addNextComics,
     );
     setComicsNextLoading(false);
   }
 
-  void ifThereWasError(Failure failure) {
+  void ifThereWasError(Failure failure, void Function(String) setError) {
     if (failure is ServerFailure) {
-      setComicsError("An error has occurred, check your connection");
+      setError("An error has occurred, check your connection");
     } else if (failure is NoInternetConnectionFailure) {
-      setComicsError(
+      setError(
         "You have no internet access, check your connection",
       );
     } else {
-      setComicsError("An error occurred, please try again later");
+      setError("An error occurred, please try again later");
     }
   }
 }

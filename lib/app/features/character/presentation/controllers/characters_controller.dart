@@ -60,7 +60,7 @@ abstract class _CharactersControllerBase with Store {
     setCharactersError("");
     final characters = await getCharacters(GetCharactersParams());
     characters.fold(
-      ifThereWasError,
+      (r) => ifThereWasError(r, setCharactersError),
       setCharacters,
     );
     if (!isRefresh) {
@@ -99,21 +99,21 @@ abstract class _CharactersControllerBase with Store {
     setCharactersNextError("");
     final characters = await getCharacters(GetCharactersParams(next: true));
     characters.fold(
-      ifThereWasError,
+      (r) => ifThereWasError(r, setCharactersNextError),
       addNextCharacters,
     );
     setCharactersNextLoading(false);
   }
 
-  void ifThereWasError(Failure failure) {
+  void ifThereWasError(Failure failure, void Function(String) setError) {
     if (failure is ServerFailure) {
-      setCharactersError("An error has occurred, check your connection");
+      setError("An error has occurred, check your connection");
     } else if (failure is NoInternetConnectionFailure) {
-      setCharactersError(
+      setError(
         "You have no internet access, check your connection",
       );
     } else {
-      setCharactersError("An error occurred, please try again later");
+      setError("An error occurred, please try again later");
     }
   }
 }

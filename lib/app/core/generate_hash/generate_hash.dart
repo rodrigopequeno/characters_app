@@ -16,10 +16,7 @@ class GenerateHashImpl implements GenerateHash {
 
   @override
   String call(String _timestamp) {
-    final txt = _timestamp + api + apiKey;
-    final di = md5.convert(utf8.encode(txt));
-
-    return di.toString();
+    return md5.convert(utf8.encode(_timestamp + api + apiKey)).toString();
   }
 
   @override

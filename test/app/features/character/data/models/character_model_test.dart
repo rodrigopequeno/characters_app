@@ -51,4 +51,17 @@ void main() {
       expect(result, expectedMap);
     });
   });
+
+  group("hashCode", () {
+    test('should return hash code based on all attributes', () async {
+      final result = tCharactersModel.hashCode;
+
+      final expected = tCharactersModel.id.hashCode ^
+          tCharactersModel.name.hashCode ^
+          tCharactersModel.description.hashCode ^
+          tCharactersModel.thumbnail.hashCode;
+
+      expect(result, expected);
+    });
+  });
 }

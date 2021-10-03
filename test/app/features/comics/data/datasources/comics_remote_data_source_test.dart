@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:characters_app/app/core/error/exceptions.dart';
 import 'package:characters_app/app/core/service/response_service.dart';
 import 'package:characters_app/app/core/service/service.dart';
-import 'package:characters_app/app/features/character/data/datasources/character_remote_data_source.dart';
-import 'package:characters_app/app/features/character/data/models/response_character_model.dart';
+import 'package:characters_app/app/features/comics/data/datasources/comics_remote_data_source.dart';
+import 'package:characters_app/app/features/comics/data/models/response_comics_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -14,12 +14,13 @@ class MockService extends Mock implements Service {}
 
 void main() {
   const offset = 0;
-  late CharacterRemoteDataSource dataSourceImpl;
+  const characterId = 0;
+  late ComicsRemoteDataSource dataSourceImpl;
   late Service mockService;
 
   setUp(() {
     mockService = MockService();
-    dataSourceImpl = CharacterRemoteDataSourceImpl(service: mockService);
+    dataSourceImpl = ComicsRemoteDataSourceImpl(service: mockService);
   });
 
   void setUpMockClientSuccess200() {
@@ -31,7 +32,7 @@ void main() {
     ).thenAnswer(
       (_) async => ResponseService(
         requestPath: '',
-        data: json.decode(fixture('characters.json')),
+        data: json.decode(fixture('comics.json')),
         statusCode: 200,
       ),
     );
@@ -52,37 +53,40 @@ void main() {
     );
   }
 
-  group('getCharacters', () {
-    final tResponseCharacterModel = ResponseCharacterModel.fromMap(
-      (json.decode(fixture('characters.json')) as Map<String, dynamic>)["data"]
+  group('getComics', () {
+    final tResponseComicsModel = ResponseComicsModel.fromMap(
+      (json.decode(fixture('comics.json')) as Map<String, dynamic>)["data"]
           as Map<String, dynamic>,
     );
     test(
-      'should perform a GET request on a URL to get Characters',
+      'should perform a GET request on a URL to get Comics',
       () async {
         setUpMockClientSuccess200();
-        dataSourceImpl.getCharacters(offset: offset);
+        dataSourceImpl.getComics(offset: offset, characterId: characterId);
         verify(
           () => mockService
-              .get('/characters', queryParameters: {"offset": offset}),
+              .get('/characters/0/comics', queryParameters: {"offset": offset}),
         );
       },
     );
 
     test(
-      'should return Characters when the response code is 200 (success)',
+      'should return Comics when the response code is 200 (success)',
       () async {
         setUpMockClientSuccess200();
-        final result = await dataSourceImpl.getCharacters(offset: offset);
-        expect(result, equals(tResponseCharacterModel));
+        final result = await dataSourceImpl.getComics(
+          offset: offset,
+          characterId: characterId,
+        );
+        expect(result, equals(tResponseComicsModel));
       },
     );
 
     test(
-      'should return next Characters when the response code is 200 (success)',
+      'should return next Comics when the response code is 200 (success)',
       () async {
-        final tResponseCharacterModelNext = ResponseCharacterModel.fromMap(
-          (json.decode(fixture('characters_next.json'))
+        final tResponseComicsModelNext = ResponseComicsModel.fromMap(
+          (json.decode(fixture('comics_next.json'))
               as Map<String, dynamic>)["data"] as Map<String, dynamic>,
         );
         when(
@@ -93,12 +97,12 @@ void main() {
         ).thenAnswer(
           (_) async => ResponseService(
             requestPath: '',
-            data: json.decode(fixture('characters.json')),
+            data: json.decode(fixture('comics.json')),
             statusCode: 200,
           ),
         );
-        final result = await dataSourceImpl.getCharacters();
-        expect(result, equals(tResponseCharacterModel));
+        final result = await dataSourceImpl.getComics(characterId: characterId);
+        expect(result, equals(tResponseComicsModel));
         when(
           () => mockService.get(
             any(),
@@ -107,13 +111,16 @@ void main() {
         ).thenAnswer(
           (_) async => ResponseService(
             requestPath: '',
-            data: json.decode(fixture('characters_next.json')),
+            data: json.decode(fixture('comics_next.json')),
             statusCode: 200,
           ),
         );
-        final resultNext = await dataSourceImpl.getCharacters(next: true);
+        final resultNext = await dataSourceImpl.getComics(
+          next: true,
+          characterId: characterId,
+        );
         expect(result, isNot(equals(resultNext)));
-        expect(resultNext, equals(tResponseCharacterModelNext));
+        expect(resultNext, equals(tResponseComicsModelNext));
       },
     );
 
@@ -121,8 +128,14 @@ void main() {
       'should throw a ServerException when the response code is 409 or other',
       () async {
         setupUpMockClientFailure409();
-        final call = dataSourceImpl.getCharacters;
-        expect(() => call(offset: offset), throwsA(isA<ServerException>()));
+        final call = dataSourceImpl.getComics;
+        expect(
+          () => call(
+            offset: offset,
+            characterId: characterId,
+          ),
+          throwsA(isA<ServerException>()),
+        );
       },
     );
 
@@ -137,8 +150,14 @@ void main() {
         ).thenThrow(
           ServiceException(),
         );
-        final call = dataSourceImpl.getCharacters;
-        expect(() => call(offset: offset), throwsA(isA<ServerException>()));
+        final call = dataSourceImpl.getComics;
+        expect(
+          () => call(
+            offset: offset,
+            characterId: characterId,
+          ),
+          throwsA(isA<ServerException>()),
+        );
       },
     );
   });

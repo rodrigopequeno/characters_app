@@ -4,20 +4,23 @@ import '../../../../core/models/image_model.dart';
 import '../../domain/entities/comic.dart';
 
 class ComicModel extends Comic {
+  final ImageModel thumbnailModel;
+  final List<ImageModel> imagesModel;
+
   ComicModel({
     required int id,
     required String title,
     required String variantDescription,
     required String description,
-    required ImageModel thumbnail,
-    required List<ImageModel> images,
+    required this.thumbnailModel,
+    required this.imagesModel,
   }) : super(
           id: id,
           title: title,
           variantDescription: variantDescription,
           description: description,
-          thumbnail: thumbnail,
-          images: images,
+          thumbnail: thumbnailModel,
+          images: imagesModel,
         );
 
   factory ComicModel.fromMap(Map<String, dynamic> map) {
@@ -26,12 +29,24 @@ class ComicModel extends Comic {
       title: (map['title'] ?? "") as String,
       variantDescription: (map['variantDescription'] ?? "") as String,
       description: (map['description'] ?? "") as String,
-      thumbnail: ImageModel.fromMap(map['thumbnail'] as Map<String, dynamic>),
-      images: List<ImageModel>.from(
+      thumbnailModel:
+          ImageModel.fromMap(map['thumbnail'] as Map<String, dynamic>),
+      imagesModel: List<ImageModel>.from(
         map['images']?.map((x) => ImageModel.fromMap(x as Map<String, dynamic>))
             as Iterable,
       ),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'variantDescription': variantDescription,
+      'description': description,
+      'thumbnail': thumbnailModel.toMap(),
+      'images': imagesModel.map((x) => x.toMap()).toList(),
+    };
   }
 
   @override

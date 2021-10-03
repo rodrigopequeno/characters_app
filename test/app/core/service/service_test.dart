@@ -1,3 +1,4 @@
+import 'package:characters_app/app/core/error/exceptions.dart';
 import 'package:characters_app/app/core/service/response_service.dart';
 import 'package:characters_app/app/core/service/service.dart';
 import 'package:dio/dio.dart';
@@ -36,6 +37,18 @@ void main() {
         final result = await serviceImpl.get<String>("url");
         verify(() => mockDio.get<String>(any()));
         expect(result, tResponseService);
+        expect(result.hashCode, tResponseService.hashCode);
+      },
+    );
+
+    test(
+      'should return ServiceException in case of DioError',
+      () async {
+        final requestOptions = RequestOptions(path: "url");
+        when(() => mockDio.get<String>(any()))
+            .thenThrow(DioError(requestOptions: requestOptions));
+        final call = serviceImpl.get;
+        expect(() => call("url"), throwsA(isA<ServiceException>()));
       },
     );
   });

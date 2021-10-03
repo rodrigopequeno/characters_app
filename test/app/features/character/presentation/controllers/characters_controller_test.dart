@@ -9,11 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mobx/mobx.dart' as mobx;
 import 'package:mocktail/mocktail.dart';
 
-abstract class Callable<T> {
-  void call([T? arg]);
-}
-
-class MockCallable<T> extends Mock implements Callable<T> {}
+import '../../../../../mocks/callable.dart';
 
 class MockGetCharacters extends Mock implements GetCharacters {}
 
@@ -146,5 +142,152 @@ void main() {
         ]);
       },
     );
+  });
+
+  group('getNextCharacters', () {
+    final tResponseCharactersNext = ResponseCharacterModel(
+      offset: 20,
+      limit: 20,
+      total: 40,
+      count: 20,
+      characters: tCharactersModel,
+    );
+    final charactersResultFromNext = [...tCharactersModel, ...tCharactersModel];
+
+    setUp(() async {
+      when(() => mockGetCharacters(any()))
+          .thenAnswer((_) async => Right(tResponseCharacters));
+      controller.loadCharacters();
+      await untilCalled(() => mockGetCharacters(any()));
+      reset(mockGetCharacters);
+    });
+
+    test('should get next characters with use case', () async {
+      when(() => mockGetCharacters(any()))
+          .thenAnswer((_) async => Right(tResponseCharactersNext));
+      controller.loadNextCharacters();
+      await untilCalled(() => mockGetCharacters(any()));
+      verify(() => mockGetCharacters(any()));
+    });
+
+    test(
+      'should emit loading and return the update the data when getting next characters successfully',
+      () async {
+        //arrange
+        final changedNextCharactersLoading = MockCallable<bool>();
+        when(() => mockGetCharacters(any()))
+            .thenAnswer((_) async => Right(tResponseCharacters));
+        mobx.reaction<bool>(
+          (_) => controller.charactersNextLoading,
+          (newValue) => changedNextCharactersLoading(newValue),
+        );
+        //act
+        await controller.loadNextCharacters();
+        await untilCalled(() => mockGetCharacters(any()));
+        //verify
+        verifyInOrder([
+          () => changedNextCharactersLoading(true),
+          () => changedNextCharactersLoading(false),
+        ]);
+        expect(controller.characters, charactersResultFromNext);
+      },
+    );
+
+    test(
+      'should emit loading and error when getting next data fails',
+      () async {
+        //arrange
+        final changedNextCharactersLoading = MockCallable<bool>();
+        final changedNextCharactersError = MockCallable<String>();
+        when(() => mockGetCharacters(any()))
+            .thenAnswer((_) async => Left(ServerFailure()));
+        mobx.reaction<bool>(
+          (_) => controller.charactersNextLoading,
+          (newValue) => changedNextCharactersLoading(newValue),
+        );
+        mobx.reaction<String>(
+          (_) => controller.charactersNextError,
+          (newValue) => changedNextCharactersError(newValue),
+        );
+        //act
+        controller.loadNextCharacters();
+        await untilCalled(() => mockGetCharacters(any()));
+        //verify
+        verifyInOrder([
+          () => changedNextCharactersLoading(true),
+          () => changedNextCharactersLoading(false),
+        ]);
+        verifyInOrder([
+          () => changedNextCharactersError(
+                "An error has occurred, check your connection",
+              ),
+        ]);
+      },
+    );
+
+    test(
+      'should emit loading and error with a proper message for the error when getting next data fails',
+      () async {
+        //arrange
+        final changedNextCharactersLoading = MockCallable<bool>();
+        final changedNextCharactersError = MockCallable<String>();
+        when(() => mockGetCharacters(any()))
+            .thenAnswer((_) async => Left(NoInternetConnectionFailure()));
+        mobx.reaction<bool>(
+          (_) => controller.charactersNextLoading,
+          (newValue) => changedNextCharactersLoading(newValue),
+        );
+        mobx.reaction<String>(
+          (_) => controller.charactersNextError,
+          (newValue) => changedNextCharactersError(newValue),
+        );
+        //act
+        controller.loadNextCharacters();
+        await untilCalled(() => mockGetCharacters(any()));
+        //verify
+        verifyInOrder([
+          () => changedNextCharactersLoading(true),
+          () => changedNextCharactersLoading(false),
+        ]);
+        verifyInOrder([
+          () => changedNextCharactersError(
+                'You have no internet access, check your connection',
+              ),
+        ]);
+      },
+    );
+  });
+
+  group('haveNext', () {
+    final tResponseCharactersNotMore = ResponseCharacterModel(
+      offset: 20,
+      limit: 20,
+      total: 20,
+      count: 20,
+      characters: tCharactersModel,
+    );
+    test('should be true if it has more characters', () async {
+      when(() => mockGetCharacters(any()))
+          .thenAnswer((_) async => Right(tResponseCharacters));
+      controller.loadCharacters();
+      await untilCalled(() => mockGetCharacters(any()));
+      expect(controller.haveNext, true);
+    });
+
+    test('should be false if there are no more characters', () async {
+      when(() => mockGetCharacters(any()))
+          .thenAnswer((_) async => Right(tResponseCharactersNotMore));
+      controller.loadCharacters();
+      await untilCalled(() => mockGetCharacters(any()));
+      expect(controller.haveNext, false);
+    });
+  });
+
+  group('toString', () {
+    test('should contain all observable attributes', () {
+      const tExpected =
+          'haveNext: true,\ncharacters: [],\ncharactersLoading: false,\ncharactersError: ,\ncharactersNextLoading: false,\ncharactersNextError: \n    ';
+      expect(controller.toString(), tExpected);
+    });
   });
 }

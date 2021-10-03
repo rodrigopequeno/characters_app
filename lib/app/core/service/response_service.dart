@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class ResponseService<T> {
   ResponseService({
     this.data,
@@ -12,15 +10,6 @@ class ResponseService<T> {
   final String? requestPath;
   final int? statusCode;
   final String? statusMessage;
-
-  @override
-  String toString() {
-    if (data is Map) {
-      return json.encode(data);
-    }
-
-    return data.toString();
-  }
 
   @override
   bool operator ==(Object other) {
