@@ -1,10 +1,10 @@
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/service/service.dart';
-
+import '../../domain/entities/character.dart';
 import '../models/response_character_model.dart';
 
 abstract class CharacterRemoteDataSource {
-  Future<ResponseCharacterModel> getCharacters({
+  Future<ResponseCharacterModel<Character>> getCharacters({
     int? offset,
     bool next = false,
   });
@@ -18,7 +18,7 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
   CharacterRemoteDataSourceImpl({required this.service});
 
   @override
-  Future<ResponseCharacterModel> getCharacters({
+  Future<ResponseCharacterModel<Character>> getCharacters({
     int? offset,
     bool next = false,
   }) async {
@@ -32,7 +32,8 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
         },
       );
       if (response.statusCode == 200) {
-        return _responseCharacterModel = ResponseCharacterModel.fromMap(
+        return _responseCharacterModel =
+            ResponseCharacterModel<Character>.fromMap(
           response.data["data"] as Map<String, dynamic>,
         );
       } else {

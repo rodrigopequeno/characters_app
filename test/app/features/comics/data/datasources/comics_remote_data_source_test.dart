@@ -140,7 +140,7 @@ void main() {
     );
 
     test(
-      'should throw a ServerException when the response code is 409 or other',
+      'should throw a ServerException when an error occurs in the request',
       () async {
         when(
           () => mockService.get(

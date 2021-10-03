@@ -1,6 +1,6 @@
 import 'package:characters_app/app/core/entities/image.dart';
+import 'package:characters_app/app/core/entities/response_data.dart';
 import 'package:characters_app/app/features/comics/domain/entities/comic.dart';
-import 'package:characters_app/app/features/comics/domain/entities/response_comics.dart';
 import 'package:characters_app/app/features/comics/domain/repositories/comics_repository.dart';
 import 'package:characters_app/app/features/comics/domain/usecases/get_comics.dart';
 import 'package:dartz/dartz.dart';
@@ -37,9 +37,9 @@ void main() {
       ),
     ],
   );
-  final tResponseComicsModel = ResponseComics(
+  final tResponseComicsModel = ResponseData(
     haveMore: false,
-    comics: tComics,
+    result: tComics,
   );
 
   test('should get the comics from the repository', () async {

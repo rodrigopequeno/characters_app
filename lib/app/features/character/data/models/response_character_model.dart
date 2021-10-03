@@ -1,8 +1,8 @@
+import '../../../../core/entities/response_data.dart';
 import '../../domain/entities/character.dart';
-import '../../domain/entities/response_character.dart';
 import 'character_model.dart';
 
-class ResponseCharacterModel extends ResponseCharacter {
+class ResponseCharacterModel<T> extends ResponseData<Character> {
   final int offset;
   final int limit;
   final int total;
@@ -15,7 +15,7 @@ class ResponseCharacterModel extends ResponseCharacter {
     required this.count,
     required List<Character> characters,
   }) : super(
-          characters: characters,
+          result: characters,
           haveMore: _hasNext(offset, count, total),
         );
 

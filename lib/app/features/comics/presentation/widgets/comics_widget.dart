@@ -26,11 +26,11 @@ class ComicsWidget extends StatelessWidget {
   Widget _buildBody() {
     return Observer(
       builder: (_) {
-        if (_controller.comicsLoading) {
+        if (_controller.objectsLoading) {
           return const LoadingIndicatorWidget();
-        } else if (_controller.comicsError.isNotEmpty) {
+        } else if (_controller.objectsError.isNotEmpty) {
           return Center(
-            child: Text(_controller.comicsError),
+            child: Text(_controller.objectsError),
           );
         } else if (_controller.comics.isEmpty) {
           return const Center(

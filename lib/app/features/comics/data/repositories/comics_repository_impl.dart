@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../../core/entities/response_data.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domain/entities/response_comics.dart';
+import '../../domain/entities/comic.dart';
 import '../../domain/repositories/comics_repository.dart';
 import '../datasources/comics_remote_data_source.dart';
 
@@ -17,7 +18,7 @@ class ComicsRepositoryImpl implements ComicsRepository {
   });
 
   @override
-  Future<Either<Failure, ResponseComics>> getComics({
+  Future<Either<Failure, ResponseData<Comic>>> getComics({
     required int characterId,
     int? offset,
     bool next = false,

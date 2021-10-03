@@ -1,6 +1,6 @@
 import 'package:characters_app/app/core/entities/image.dart';
+import 'package:characters_app/app/core/entities/response_data.dart';
 import 'package:characters_app/app/features/character/domain/entities/character.dart';
-import 'package:characters_app/app/features/character/domain/entities/response_character.dart';
 import 'package:characters_app/app/features/character/domain/repositories/character_repository.dart';
 import 'package:characters_app/app/features/character/domain/usecases/get_characters.dart';
 import 'package:dartz/dartz.dart';
@@ -34,9 +34,9 @@ void main() {
       ),
     ],
   );
-  final tResponseCharactersModel = ResponseCharacter(
+  final tResponseCharactersModel = ResponseData(
     haveMore: false,
-    characters: tCharacters,
+    result: tCharacters,
   );
 
   test('should get the characters from the repository', () async {

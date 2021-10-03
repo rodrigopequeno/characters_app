@@ -1,3 +1,4 @@
+import 'package:characters_app/app/core/entities/response_data.dart';
 import 'package:characters_app/app/core/error/exceptions.dart';
 import 'package:characters_app/app/core/error/failure.dart';
 import 'package:characters_app/app/core/models/image_model.dart';
@@ -6,7 +7,6 @@ import 'package:characters_app/app/features/comics/data/datasources/comics_remot
 import 'package:characters_app/app/features/comics/data/models/comic_model.dart';
 import 'package:characters_app/app/features/comics/data/models/response_comics_model.dart';
 import 'package:characters_app/app/features/comics/data/repositories/comics_repository_impl.dart';
-import 'package:characters_app/app/features/comics/domain/entities/response_comics.dart';
 import 'package:characters_app/app/features/comics/domain/repositories/comics_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -117,7 +117,7 @@ void main() {
               characterId: characterId,
             ),
           );
-          expect(result, isA<Right<Failure, ResponseComics>>());
+          expect(result, isA<Right<Failure, ResponseData>>());
         },
       );
 

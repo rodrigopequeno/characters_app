@@ -1,3 +1,4 @@
+import 'package:characters_app/app/core/entities/response_data.dart';
 import 'package:characters_app/app/core/error/exceptions.dart';
 import 'package:characters_app/app/core/error/failure.dart';
 import 'package:characters_app/app/core/models/image_model.dart';
@@ -6,7 +7,7 @@ import 'package:characters_app/app/features/character/data/datasources/character
 import 'package:characters_app/app/features/character/data/models/character_model.dart';
 import 'package:characters_app/app/features/character/data/models/response_character_model.dart';
 import 'package:characters_app/app/features/character/data/repositories/character_repository_impl.dart';
-import 'package:characters_app/app/features/character/domain/entities/response_character.dart';
+import 'package:characters_app/app/features/character/domain/entities/character.dart';
 import 'package:characters_app/app/features/character/domain/repositories/character_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -71,7 +72,7 @@ void main() {
         ),
       ],
     );
-    final tResponseCharacters = ResponseCharacterModel(
+    final tResponseCharacters = ResponseCharacterModel<Character>(
       offset: offset,
       limit: 20,
       total: 40,
@@ -98,7 +99,7 @@ void main() {
 
           final result = await repositoryImpl.getCharacters(offset: offset);
           verify(() => mockRemoteDataSource.getCharacters(offset: offset));
-          expect(result, isA<Right<Failure, ResponseCharacter>>());
+          expect(result, isA<Right<Failure, ResponseData>>());
         },
       );
 

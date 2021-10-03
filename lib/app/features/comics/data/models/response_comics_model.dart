@@ -1,8 +1,9 @@
+import '../../../../core/entities/response_data.dart';
+
 import '../../domain/entities/comic.dart';
-import '../../domain/entities/response_comics.dart';
 import 'comic_model.dart';
 
-class ResponseComicsModel extends ResponseComics {
+class ResponseComicsModel extends ResponseData<Comic> {
   final int offset;
   final int limit;
   final int total;
@@ -15,7 +16,7 @@ class ResponseComicsModel extends ResponseComics {
     required this.count,
     required List<Comic> comics,
   }) : super(
-          comics: comics,
+          result: comics,
           haveMore: _hasNext(offset, count, total),
         );
 

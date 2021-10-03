@@ -64,7 +64,7 @@ void main() {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Right(tResponseCharacters));
         mobx.reaction<bool>(
-          (_) => controller.charactersLoading,
+          (_) => controller.objectsLoading,
           (newValue) => changedCharactersLoading(newValue),
         );
         //act
@@ -88,11 +88,11 @@ void main() {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Left(ServerFailure()));
         mobx.reaction<bool>(
-          (_) => controller.charactersLoading,
+          (_) => controller.objectsLoading,
           (newValue) => changedCharactersLoading(newValue),
         );
         mobx.reaction<String>(
-          (_) => controller.charactersError,
+          (_) => controller.objectsError,
           (newValue) => changedCharactersError(newValue),
         );
         //act
@@ -120,11 +120,11 @@ void main() {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Left(NoInternetConnectionFailure()));
         mobx.reaction<bool>(
-          (_) => controller.charactersLoading,
+          (_) => controller.objectsLoading,
           (newValue) => changedCharactersLoading(newValue),
         );
         mobx.reaction<String>(
-          (_) => controller.charactersError,
+          (_) => controller.objectsError,
           (newValue) => changedCharactersError(newValue),
         );
         //act
@@ -178,7 +178,7 @@ void main() {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Right(tResponseCharacters));
         mobx.reaction<bool>(
-          (_) => controller.charactersNextLoading,
+          (_) => controller.objectsNextLoading,
           (newValue) => changedNextCharactersLoading(newValue),
         );
         //act
@@ -202,11 +202,11 @@ void main() {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Left(ServerFailure()));
         mobx.reaction<bool>(
-          (_) => controller.charactersNextLoading,
+          (_) => controller.objectsNextLoading,
           (newValue) => changedNextCharactersLoading(newValue),
         );
         mobx.reaction<String>(
-          (_) => controller.charactersNextError,
+          (_) => controller.objectsNextError,
           (newValue) => changedNextCharactersError(newValue),
         );
         //act
@@ -234,11 +234,11 @@ void main() {
         when(() => mockGetCharacters(any()))
             .thenAnswer((_) async => Left(NoInternetConnectionFailure()));
         mobx.reaction<bool>(
-          (_) => controller.charactersNextLoading,
+          (_) => controller.objectsNextLoading,
           (newValue) => changedNextCharactersLoading(newValue),
         );
         mobx.reaction<String>(
-          (_) => controller.charactersNextError,
+          (_) => controller.objectsNextError,
           (newValue) => changedNextCharactersError(newValue),
         );
         //act
@@ -295,7 +295,7 @@ void main() {
   group('toString', () {
     test('should contain all observable attributes', () {
       const tExpected =
-          'snackBarIsVisible: false,\nhaveNext: true,\ncharacters: [],\ncharactersLoading: false,\ncharactersError: ,\ncharactersNextLoading: false,\ncharactersNextError: \n    ';
+          'characters: [],\nsnackBarIsVisible: false\n    ';
       expect(controller.toString(), tExpected);
     });
   });

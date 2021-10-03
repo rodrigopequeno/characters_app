@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../../core/entities/response_data.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domain/entities/response_character.dart';
+import '../../domain/entities/character.dart';
 import '../../domain/repositories/character_repository.dart';
 import '../datasources/character_remote_data_source.dart';
 
@@ -17,7 +18,7 @@ class CharacterRepositoryImpl implements CharacterRepository {
   });
 
   @override
-  Future<Either<Failure, ResponseCharacter>> getCharacters({
+  Future<Either<Failure, ResponseData<Character>>> getCharacters({
     int? offset,
     bool next = false,
   }) async {

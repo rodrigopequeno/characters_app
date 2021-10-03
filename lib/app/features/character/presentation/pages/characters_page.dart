@@ -109,11 +109,11 @@ class _CharactersPageState
               const SpacerHeight(16),
               Observer(
                 builder: (_) {
-                  if (controller.charactersLoading) {
+                  if (controller.objectsLoading) {
                     return const LoadingIndicatorWidget();
-                  } else if (controller.charactersError.isNotEmpty) {
+                  } else if (controller.objectsError.isNotEmpty) {
                     return Center(
-                      child: Text(controller.charactersError),
+                      child: Text(controller.objectsError),
                     );
                   }
 
@@ -142,11 +142,11 @@ class _CharactersPageState
   Widget _buildNextLoading() {
     return Observer(
       builder: (_) {
-        if (controller.charactersNextLoading) {
+        if (controller.objectsNextLoading) {
           return const SizedBox(height: 150, child: LoadingIndicatorWidget());
-        } else if (controller.charactersNextError.isNotEmpty) {
+        } else if (controller.objectsNextError.isNotEmpty) {
           return Center(
-            child: Text(controller.charactersNextError),
+            child: Text(controller.objectsNextError),
           );
         }
 

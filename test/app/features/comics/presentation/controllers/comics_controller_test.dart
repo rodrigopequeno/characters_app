@@ -74,7 +74,7 @@ void main() {
         when(() => mockGetComics(any()))
             .thenAnswer((_) async => Right(tResponseComics));
         mobx.reaction<bool>(
-          (_) => controller.comicsLoading,
+          (_) => controller.objectsLoading,
           (newValue) => changedComicsLoading(newValue),
         );
         //act
@@ -98,11 +98,11 @@ void main() {
         when(() => mockGetComics(any()))
             .thenAnswer((_) async => Left(ServerFailure()));
         mobx.reaction<bool>(
-          (_) => controller.comicsLoading,
+          (_) => controller.objectsLoading,
           (newValue) => changedComicsLoading(newValue),
         );
         mobx.reaction<String>(
-          (_) => controller.comicsError,
+          (_) => controller.objectsError,
           (newValue) => changedComicsError(newValue),
         );
         //act
@@ -130,11 +130,11 @@ void main() {
         when(() => mockGetComics(any()))
             .thenAnswer((_) async => Left(NoInternetConnectionFailure()));
         mobx.reaction<bool>(
-          (_) => controller.comicsLoading,
+          (_) => controller.objectsLoading,
           (newValue) => changedComicsLoading(newValue),
         );
         mobx.reaction<String>(
-          (_) => controller.comicsError,
+          (_) => controller.objectsError,
           (newValue) => changedComicsError(newValue),
         );
         //act
@@ -188,7 +188,7 @@ void main() {
         when(() => mockGetComics(any()))
             .thenAnswer((_) async => Right(tResponseComics));
         mobx.reaction<bool>(
-          (_) => controller.comicsNextLoading,
+          (_) => controller.objectsNextLoading,
           (newValue) => changedNextComicsLoading(newValue),
         );
         //act
@@ -212,11 +212,11 @@ void main() {
         when(() => mockGetComics(any()))
             .thenAnswer((_) async => Left(ServerFailure()));
         mobx.reaction<bool>(
-          (_) => controller.comicsNextLoading,
+          (_) => controller.objectsNextLoading,
           (newValue) => changedNextComicsLoading(newValue),
         );
         mobx.reaction<String>(
-          (_) => controller.comicsNextError,
+          (_) => controller.objectsNextError,
           (newValue) => changedNextComicsError(newValue),
         );
         //act
@@ -244,11 +244,11 @@ void main() {
         when(() => mockGetComics(any()))
             .thenAnswer((_) async => Left(NoInternetConnectionFailure()));
         mobx.reaction<bool>(
-          (_) => controller.comicsNextLoading,
+          (_) => controller.objectsNextLoading,
           (newValue) => changedNextComicsLoading(newValue),
         );
         mobx.reaction<String>(
-          (_) => controller.comicsNextError,
+          (_) => controller.objectsNextError,
           (newValue) => changedNextComicsError(newValue),
         );
         //act
@@ -295,8 +295,7 @@ void main() {
 
   group('toString', () {
     test('should contain all observable attributes', () {
-      const tExpected =
-          'haveNext: true,\ncomics: [],\ncomicsLoading: false,\ncomicsError: ,\ncomicsNextLoading: false,\ncomicsNextError: \n    ';
+      const tExpected = 'comics: []\n    ';
       expect(controller.toString(), tExpected);
     });
   });
