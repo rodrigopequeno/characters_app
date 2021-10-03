@@ -38,50 +38,57 @@ class CharacterInfoPage extends StatelessWidget {
 
     final total = _getSizePage();
 
-    return SingleChildScrollView(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            height: total,
-          ),
-          Positioned.fill(
-            child: Hero(
-              tag: character.hashCode,
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: MediaQuery.of(context).size.height * 0.55,
-                    child: ImageNetworkWidget(
-                      image: character.thumbnail.urlFullSize,
-                      colorBlendMode: BlendMode.multiply,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: GradientSystem.gradientBlack,
-                      ),
-                    ),
-                  ),
-                ],
+    return RefreshIndicator(
+      onRefresh: () => comicsController.loadComics(isRefresh: true),
+      child: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: total,
+            ),
+            _buildImageCharacter(context),
+            Positioned(
+              top: positionName,
+              left: paddingAll,
+              right: paddingAll,
+              child: _buildInformation(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Positioned _buildImageCharacter(BuildContext context) {
+    return Positioned.fill(
+      child: Hero(
+        tag: character.hashCode,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: MediaQuery.of(context).size.height * 0.55,
+              child: ImageNetworkWidget(
+                image: character.thumbnail.urlFullSize,
+                colorBlendMode: BlendMode.multiply,
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-          Positioned(
-            top: positionName,
-            left: paddingAll,
-            right: paddingAll,
-            child: _buildInformation(context),
-          ),
-        ],
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: GradientSystem.gradientBlack,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -33,6 +33,7 @@ abstract class _CharactersControllerBase
   Future<void> loadCharacters({bool isRefresh = false}) => loadObjects(
         usecase: getCharacters,
         params: GetCharactersParams(),
+        isRefresh: isRefresh,
       );
 
   Future<void> loadNextCharacters() => loadNextObjects(

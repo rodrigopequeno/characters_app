@@ -24,6 +24,7 @@ abstract class _ComicsControllerBase
   Future<void> loadComics({bool isRefresh = false}) => loadObjects(
         usecase: getComics,
         params: GetComicsParams(characterId: characterId),
+        isRefresh: isRefresh,
       );
 
   Future<void> loadNextComics() => loadNextObjects(
