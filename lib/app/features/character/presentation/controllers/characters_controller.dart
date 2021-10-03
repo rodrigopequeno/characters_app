@@ -18,6 +18,15 @@ abstract class _CharactersControllerBase with Store {
   });
 
   @observable
+  bool _snackBarIsVisible = false;
+  @computed
+  bool get snackBarIsVisible => _snackBarIsVisible;
+  // ignore: avoid_positional_boolean_parameters, use_setters_to_change_properties
+  void setSnackBarIsVisible(bool newValue) {
+    _snackBarIsVisible = newValue;
+  }
+
+  @observable
   bool _haveNext = true;
   @computed
   bool get haveNext => _haveNext;

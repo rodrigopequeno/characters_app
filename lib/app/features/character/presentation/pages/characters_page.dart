@@ -52,19 +52,16 @@ class _CharactersPageState
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      leading: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 18,
-          vertical: 15,
-        ),
-        child: IconsSystem.menu(width: 20, height: 15),
+      leading: IconButton(
+        onPressed: _showSnackBar,
+        icon: IconsSystem.menu(width: 20),
       ),
       title: IconsSystem.logoMarvel(
         color: Theme.of(context).colorScheme.secondary,
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: _showSnackBar,
           icon: Icon(
             Icons.search,
             color: Theme.of(context).primaryColor,
@@ -72,6 +69,22 @@ class _CharactersPageState
         ),
       ],
     );
+  }
+
+  Future<void> _showSnackBar() async {
+    if (controller.snackBarIsVisible) {
+      return;
+    }
+    const duration = Duration(milliseconds: 1000);
+    final snackBar = SnackBar(
+      content: const Text('Recurso não está disponível!'),
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      duration: duration,
+    );
+    controller.setSnackBarIsVisible(true);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    await Future.delayed(duration)
+        .then((value) => controller.setSnackBarIsVisible(false));
   }
 
   Widget _buildBody(BuildContext context) {

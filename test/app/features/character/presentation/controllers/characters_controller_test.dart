@@ -283,10 +283,19 @@ void main() {
     });
   });
 
+  group('snackBarIsVisible', () {
+    test('should change the value of snackBarIsVisible', () {
+      expect(controller.snackBarIsVisible, false);
+      const tNewValue = true;
+      controller.setSnackBarIsVisible(tNewValue);
+      expect(controller.snackBarIsVisible, tNewValue);
+    });
+  });
+
   group('toString', () {
     test('should contain all observable attributes', () {
       const tExpected =
-          'haveNext: true,\ncharacters: [],\ncharactersLoading: false,\ncharactersError: ,\ncharactersNextLoading: false,\ncharactersNextError: \n    ';
+          'snackBarIsVisible: false,\nhaveNext: true,\ncharacters: [],\ncharactersLoading: false,\ncharactersError: ,\ncharactersNextLoading: false,\ncharactersNextError: \n    ';
       expect(controller.toString(), tExpected);
     });
   });

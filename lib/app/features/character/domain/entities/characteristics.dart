@@ -27,13 +27,13 @@ extension CharacteristicsExtension on Characteristics {
   String valueFormatted(double value) {
     switch (this) {
       case Characteristics.age:
-        return "${value.toInt()} anos";
+        return "${value.toInt()} years";
       case Characteristics.height:
         return "${value.toStringAsFixed(2)}m";
       case Characteristics.weight:
         return "${value.toStringAsFixed(1)}kg";
       case Characteristics.universe:
-        return "Terra ${value.toInt()}";
+        return "Earth ${value.toInt()}";
     }
   }
 }
