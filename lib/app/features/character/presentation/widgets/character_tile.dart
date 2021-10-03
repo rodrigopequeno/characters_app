@@ -1,9 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../../core/design_system/gradient.dart';
+import '../../../../core/widgets/image_network/image_network_widget.dart';
 import '../../domain/entities/character.dart';
-import '../pages/character_info_page.dart';
+import '../character_info_module.dart';
 
 class CharacterTile extends StatelessWidget {
   final Character character;
@@ -12,83 +13,52 @@ class CharacterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12, left: 12, top: 10),
-      child: InkWell(
-        onTap: () {
-          Modular.to.pushNamed(
-            ".${CharacterInfoPage.routerName}",
-            arguments: character,
-          );
-        },
-        child: Card(
-          clipBehavior: Clip.hardEdge,
-          elevation: 3,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  flex: 5,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 6.5,
-                    width: MediaQuery.of(context).size.height / 6.5,
-                    child: CircleAvatar(
-                      radius: 20,
-                      child: ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: character.thumbnail.urlStandardFantastic,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
+    return InkWell(
+      onTap: () {
+        Modular.to.pushNamed(
+          ".${CharacterInfoModule.routerName}/${character.id}",
+          arguments: character,
+        );
+      },
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ImageNetworkWidget(
+                image: character.thumbnail.urlFullSize,
+                colorBlendMode: BlendMode.multiply,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: GradientSystem.gradientDark,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, bottom: 20, right: 16),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        character.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
+                        style: Theme.of(context).textTheme.headline3,
                       ),
                     ),
-                  ),
+                  ],
                 ),
-                Expanded(
-                  flex: 6,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Text(
-                          character.name,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        _handlingDescription(),
-                        maxLines: 4,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                const Expanded(
-                  child: SizedBox(),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
-  }
-
-  String _handlingDescription() {
-    if (character.description.isEmpty) {
-      return "Without description";
-    } else if (character.description.length > 100) {
-      return "${character.description.substring(0, 101)}...";
-    } else {
-      return character.description;
-    }
   }
 }

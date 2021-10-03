@@ -1,22 +1,15 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../comics/comics_module.dart';
 import 'data/datasources/character_remote_data_source.dart';
 import 'data/repositories/character_repository_impl.dart';
-import 'domain/entities/character.dart';
 import 'domain/repositories/character_repository.dart';
 import 'domain/usecases/get_characters.dart';
+import 'presentation/character_info_module.dart';
 import 'presentation/controllers/characters_controller.dart';
-import 'presentation/pages/character_info_page.dart';
 import 'presentation/pages/characters_page.dart';
 
 class CharacterModule extends Module {
   static const String routerName = '/character';
-
-  @override
-  List<Module> get imports => [
-        ComicsModule(),
-      ];
 
   @override
   final List<Bind> binds = [
@@ -45,11 +38,9 @@ class CharacterModule extends Module {
       CharactersPage.routerName,
       child: (_, args) => const CharactersPage(),
     ),
-    ChildRoute(
-      CharacterInfoPage.routerName,
-      child: (_, args) => CharacterInfoPage(
-        character: args.data as Character,
-      ),
+    ModuleRoute(
+      CharacterInfoModule.routerName,
+      module: CharacterInfoModule(),
     ),
   ];
 }

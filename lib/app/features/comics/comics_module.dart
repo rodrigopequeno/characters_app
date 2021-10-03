@@ -4,6 +4,7 @@ import '../comics/data/repositories/comics_repository_impl.dart';
 import '../comics/domain/repositories/comics_repository.dart';
 import '../comics/domain/usecases/get_comics.dart';
 import 'data/datasources/comics_remote_data_source.dart';
+import 'presentation/controllers/comics_controller.dart';
 
 class ComicsModule extends Module {
   @override
@@ -23,6 +24,13 @@ class ComicsModule extends Module {
     ),
     Bind.lazySingleton(
       (i) => GetComics(i.get()),
+      export: true,
+    ),
+    Bind.lazySingleton(
+      (i) => ComicsController(
+        characterId: int.parse(i.args.params['characterId'] as String),
+        getComics: i.get(),
+      ),
       export: true,
     ),
   ];

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../../core/design_system/icons.dart';
+import '../../../../core/widgets/loading_indicator/loading_indicator_widget.dart';
+import '../../../../core/widgets/spacers/spacers.dart';
 import '../controllers/characters_controller.dart';
 import '../widgets/character_tile.dart';
+import '../widgets/header_character_page.dart';
 
 class CharactersPage extends StatefulWidget {
   static const routerName = "/";
@@ -15,68 +19,143 @@ class CharactersPage extends StatefulWidget {
 
 class _CharactersPageState
     extends ModularState<CharactersPage, CharactersController> {
+  late ScrollController _scrollController;
+
   @override
   void initState() {
     controller.loadCharacters();
+    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      controller.loadNextCharacters();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Characters"),
-        centerTitle: true,
-      ),
-      body: _buildBody(),
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
     );
   }
 
-  Widget _buildBody() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      leading: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 15,
+        ),
+        child: IconsSystem.menu(width: 20, height: 15),
+      ),
+      title: IconsSystem.logoMarvel(
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.search,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => controller.loadCharacters(isRefresh: true),
-      child: Observer(
-        builder: (_) {
-          if (controller.charactersLoading) {
-            return _buildLoading();
-          } else if (controller.charactersError.isNotEmpty) {
-            return Center(
-              child: Text(controller.charactersError),
-            );
-          }
-          final characters = controller.characters;
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              const HeaderCharacterPage(),
+              const SpacerHeight(48),
+              Row(
+                children: [
+                  Text(
+                    "Characters",
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ],
+              ),
+              const SpacerHeight(16),
+              Observer(
+                builder: (_) {
+                  if (controller.charactersLoading) {
+                    return const LoadingIndicatorWidget();
+                  } else if (controller.charactersError.isNotEmpty) {
+                    return Center(
+                      child: Text(controller.charactersError),
+                    );
+                  }
 
-          return ListView.builder(
-            itemCount: characters.length + 1,
-            itemBuilder: (context, index) {
-              if (index < characters.length) {
-                return CharacterTile(
-                  character: characters[index],
-                );
-              } else if (!controller.haveNext) {
-                return Container(
-                  height: 30,
-                );
-              }
-              controller.loadNextCharacters();
-
-              return SizedBox(
-                height: 150,
-                child: _buildLoading(),
-              );
-            },
-          );
-        },
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
+                      childAspectRatio: 7 / 11.5,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: controller.characters.length,
+                    itemBuilder: _buildItems,
+                  );
+                },
+              ),
+              _buildNextLoading(),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(
-        backgroundColor: Colors.white,
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[700]!),
-      ),
+  Widget _buildNextLoading() {
+    return Observer(
+      builder: (_) {
+        if (controller.charactersNextLoading) {
+          return const SizedBox(height: 150, child: LoadingIndicatorWidget());
+        } else if (controller.charactersNextError.isNotEmpty) {
+          return Center(
+            child: Text(controller.charactersNextError),
+          );
+        }
+
+        return const SpacerHeight(150);
+      },
+    );
+  }
+
+  Widget _buildItems(BuildContext _, int index) {
+    if (index < controller.characters.length) {
+      return CharacterTile(
+        character: controller.characters[index],
+      );
+    } else if (!controller.haveNext) {
+      return Container(
+        height: 30,
+      );
+    }
+
+    return const SizedBox(
+      height: 150,
+      child: LoadingIndicatorWidget(),
     );
   }
 }

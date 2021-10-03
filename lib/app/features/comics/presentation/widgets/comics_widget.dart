@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../../../core/widgets/loading_indicator/loading_indicator_widget.dart';
 import '../controllers/comics_controller.dart';
 import 'comic_tile.dart';
 
 class ComicsWidget extends StatelessWidget {
   final double height;
   final ComicsController _controller;
-  ComicsWidget({
+  const ComicsWidget({
     Key? key,
     required ComicsController controller,
     this.height = 300,
   })  : _controller = controller,
-        super(key: key) {
-    _controller.loadComics();
-  }
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,7 @@ class ComicsWidget extends StatelessWidget {
     return Observer(
       builder: (_) {
         if (_controller.comicsLoading) {
-          return _buildLoading();
+          return const LoadingIndicatorWidget();
         } else if (_controller.comicsError.isNotEmpty) {
           return Center(
             child: Text(_controller.comicsError),
@@ -45,10 +44,14 @@ class ComicsWidget extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemBuilder: (_, index) {
             if (index < comics.length) {
-              return SizedBox(
-                width: 250,
-                child: ComicTile(
-                  comic: comics[index],
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 153,
+                  height: 230,
+                  child: ComicTile(
+                    comic: comics[index],
+                  ),
                 ),
               );
             } else if (!_controller.haveNext) {
@@ -58,22 +61,13 @@ class ComicsWidget extends StatelessWidget {
             }
             _controller.loadNextComics();
 
-            return SizedBox(
+            return const SizedBox(
               height: 150,
-              child: _buildLoading(),
+              child: LoadingIndicatorWidget(),
             );
           },
         );
       },
-    );
-  }
-
-  Widget _buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(
-        backgroundColor: Colors.white,
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[700]!),
-      ),
     );
   }
 }

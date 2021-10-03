@@ -31,7 +31,7 @@ class _SplashScreenPageState
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF080229),
+      color: Theme.of(context).primaryColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
