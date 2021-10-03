@@ -44,25 +44,34 @@ class CharacterInfoPage extends StatelessWidget {
           Container(
             height: total,
           ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: MediaQuery.of(context).size.height * 0.55,
-            child: ImageNetworkWidget(
-              image: character.thumbnail.urlFullSize,
-              colorBlendMode: BlendMode.multiply,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: GradientSystem.gradientBlack,
+          Positioned.fill(
+            child: Hero(
+              tag: character.hashCode,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    child: ImageNetworkWidget(
+                      image: character.thumbnail.urlFullSize,
+                      colorBlendMode: BlendMode.multiply,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: GradientSystem.gradientBlack,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

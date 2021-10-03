@@ -25,15 +25,24 @@ class CharacterTile extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: ImageNetworkWidget(
-                image: character.thumbnail.urlFullSize,
-                colorBlendMode: BlendMode.multiply,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                gradient: GradientSystem.gradientDark,
+              child: Hero(
+                tag: character.hashCode,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: ImageNetworkWidget(
+                        image: character.thumbnail.urlFullSize,
+                        colorBlendMode: BlendMode.multiply,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: GradientSystem.gradientDark,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
