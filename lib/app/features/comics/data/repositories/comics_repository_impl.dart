@@ -3,32 +3,34 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domain/entities/response_character.dart';
-import '../../domain/repositories/character_repository.dart';
-import '../datasources/character_remote_data_source.dart';
+import '../../domain/entities/response_comics.dart';
+import '../../domain/repositories/comics_repository.dart';
+import '../datasources/comics_remote_data_source.dart';
 
-class CharacterRepositoryImpl implements CharacterRepository {
+class ComicsRepositoryImpl implements ComicsRepository {
   NetworkInfo networkInfo;
-  CharacterRemoteDataSource characterRemoteDataSource;
+  ComicsRemoteDataSource comicsRemoteDataSource;
 
-  CharacterRepositoryImpl({
+  ComicsRepositoryImpl({
     required this.networkInfo,
-    required this.characterRemoteDataSource,
+    required this.comicsRemoteDataSource,
   });
 
   @override
-  Future<Either<Failure, ResponseCharacter>> getCharacters({
+  Future<Either<Failure, ResponseComics>> getComics({
+    required int characterId,
     int? offset,
     bool next = false,
   }) async {
     if (await networkInfo.isConnected) {
       try {
-        final responseCharacter = await characterRemoteDataSource.getCharacters(
+        final comics = await comicsRemoteDataSource.getComics(
+          characterId: characterId,
           offset: offset,
           next: next,
         );
 
-        return Right(responseCharacter);
+        return Right(comics);
       } on ServerException {
         return Left(ServerFailure());
       }

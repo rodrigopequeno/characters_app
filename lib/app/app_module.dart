@@ -1,10 +1,12 @@
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'core/generate_hash/generate_hash.dart';
 import 'core/http_client/http_client.dart';
 import 'core/http_client/interceptors/parameter_interceptor.dart';
+import 'core/network/network_info.dart';
 import 'core/service/service.dart';
 import 'features/character/character_module.dart';
 import 'features/splash_screen/presentation/controllers/splash_screen_controller.dart';
@@ -30,6 +32,12 @@ class AppModule extends Module {
     ),
     Bind.lazySingleton<Service>(
       (i) => ServiceImpl(client: i.get()),
+    ),
+    Bind.lazySingleton<InternetConnectionChecker>(
+      (i) => InternetConnectionChecker(),
+    ),
+    Bind.lazySingleton<NetworkInfo>(
+      (i) => NetworkInfoImpl(i.get()),
     ),
     Bind.lazySingleton((i) => SplashScreenController()),
   ];

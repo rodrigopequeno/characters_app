@@ -1,7 +1,7 @@
-import '../../domain/entities/thumbnail.dart';
+import '../entities/image.dart';
 
-class ThumbnailModel extends Thumbnail {
-  ThumbnailModel({
+class ImageModel extends Image {
+  ImageModel({
     required String path,
     required String extension,
   }) : super(
@@ -16,10 +16,10 @@ class ThumbnailModel extends Thumbnail {
     };
   }
 
-  factory ThumbnailModel.fromMap(Map<String, dynamic> map) {
-    return ThumbnailModel(
-      path: map['path'] as String,
-      extension: map['extension'] as String,
+  factory ImageModel.fromMap(Map<String, dynamic> map) {
+    return ImageModel(
+      path: (map['path'] ?? "") as String,
+      extension: (map['extension'] ?? "") as String,
     );
   }
 
@@ -27,7 +27,7 @@ class ThumbnailModel extends Thumbnail {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ThumbnailModel &&
+    return other is ImageModel &&
         other.path == path &&
         other.extension == extension;
   }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../comics/presentation/controllers/comics_controller.dart';
+import '../../../comics/presentation/widgets/comics_widget.dart';
 import '../../domain/entities/character.dart';
 import '../widgets/character_tile.dart';
 
@@ -13,7 +16,7 @@ class CharacterInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Info"),
+        title: const Text("Information"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -27,7 +30,7 @@ class CharacterInfoPage extends StatelessWidget {
               height: 30,
             ),
             const Text(
-              "Quadrinhos:",
+              "Comics:",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -36,19 +39,10 @@ class CharacterInfoPage extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: character.comics.returned,
-                itemBuilder: (_, index) {
-                  final comics = character.comics.items[index];
-
-                  return ListTile(
-                    title: Text(
-                      comics.name,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  );
-                },
+            ComicsWidget(
+              controller: ComicsController(
+                characterId: character.id,
+                getComics: Modular.get(),
               ),
             ),
           ],

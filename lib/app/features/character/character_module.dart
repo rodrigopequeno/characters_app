@@ -1,16 +1,22 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-import '../../core/network/network_info.dart';
+import '../comics/comics_module.dart';
 import 'data/datasources/character_remote_data_source.dart';
 import 'data/repositories/character_repository_impl.dart';
+import 'domain/entities/character.dart';
 import 'domain/repositories/character_repository.dart';
 import 'domain/usecases/get_characters.dart';
 import 'presentation/controllers/characters_controller.dart';
+import 'presentation/pages/character_info_page.dart';
 import 'presentation/pages/characters_page.dart';
 
 class CharacterModule extends Module {
   static const String routerName = '/character';
+
+  @override
+  List<Module> get imports => [
+        ComicsModule(),
+      ];
 
   @override
   final List<Bind> binds = [
@@ -18,12 +24,6 @@ class CharacterModule extends Module {
       (i) => CharacterRemoteDataSourceImpl(
         service: i.get(),
       ),
-    ),
-    Bind.lazySingleton<InternetConnectionChecker>(
-      (i) => InternetConnectionChecker(),
-    ),
-    Bind.lazySingleton<NetworkInfo>(
-      (i) => NetworkInfoImpl(i.get()),
     ),
     Bind.lazySingleton<CharacterRepository>(
       (i) => CharacterRepositoryImpl(
@@ -44,6 +44,12 @@ class CharacterModule extends Module {
     ChildRoute(
       CharactersPage.routerName,
       child: (_, args) => const CharactersPage(),
+    ),
+    ChildRoute(
+      CharacterInfoPage.routerName,
+      child: (_, args) => CharacterInfoPage(
+        character: args.data as Character,
+      ),
     ),
   ];
 }

@@ -1,23 +1,18 @@
+import '../../../../core/models/image_model.dart';
 import '../../domain/entities/character.dart';
 
-import 'comics_model.dart';
-import 'thumbnail_model.dart';
-
 class CharacterModel extends Character {
-  final ThumbnailModel thumbnailModel;
-  final ComicsModel comicsModel;
+  final ImageModel thumbnailModel;
 
   CharacterModel({
     required int id,
     required String name,
     required String description,
     required this.thumbnailModel,
-    required this.comicsModel,
   }) : super(
           id: id,
           description: description,
           name: name,
-          comics: comicsModel,
           thumbnail: thumbnailModel,
         );
 
@@ -27,24 +22,17 @@ class CharacterModel extends Character {
       'name': name,
       'description': description,
       'thumbnail': thumbnailModel.toMap(),
-      'comics': comicsModel.toMap(),
     };
   }
 
   factory CharacterModel.fromMap(Map<String, dynamic> map) {
     return CharacterModel(
       id: map['id'] as int,
-      name: map['name'] as String,
-      description: map['description'] as String,
+      name: (map['name'] ?? "") as String,
+      description: (map['description'] ?? "") as String,
       thumbnailModel:
-          ThumbnailModel.fromMap(map['thumbnail'] as Map<String, dynamic>),
-      comicsModel: ComicsModel.fromMap(map['comics'] as Map<String, dynamic>),
+          ImageModel.fromMap(map['thumbnail'] as Map<String, dynamic>),
     );
-  }
-
-  @override
-  String toString() {
-    return 'Character(id: $id, name: $name, description: $description, thumbnail: $thumbnail, comics: $comics)';
   }
 
   @override
@@ -55,8 +43,7 @@ class CharacterModel extends Character {
         other.id == id &&
         other.name == name &&
         other.description == description &&
-        other.thumbnail == thumbnail &&
-        other.comics == comics;
+        other.thumbnail == thumbnail;
   }
 
   @override
@@ -64,7 +51,6 @@ class CharacterModel extends Character {
     return id.hashCode ^
         name.hashCode ^
         description.hashCode ^
-        thumbnail.hashCode ^
-        comics.hashCode;
+        thumbnail.hashCode;
   }
 }

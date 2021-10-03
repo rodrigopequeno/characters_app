@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../domain/entities/character.dart';
+import '../pages/character_info_page.dart';
 
 class CharacterTile extends StatelessWidget {
   final Character character;
@@ -10,13 +12,15 @@ class CharacterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final urlImage =
-        """${character.thumbnail.path}/standard_fantastic.${character.thumbnail.extension}""";
-
     return Padding(
       padding: const EdgeInsets.only(right: 12, left: 12, top: 10),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Modular.to.pushNamed(
+            ".${CharacterInfoPage.routerName}",
+            arguments: character,
+          );
+        },
         child: Card(
           clipBehavior: Clip.hardEdge,
           elevation: 3,
@@ -34,7 +38,7 @@ class CharacterTile extends StatelessWidget {
                       radius: 20,
                       child: ClipOval(
                         child: CachedNetworkImage(
-                          imageUrl: urlImage,
+                          imageUrl: character.thumbnail.urlStandardFantastic,
                           placeholder: (context, url) =>
                               const CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>

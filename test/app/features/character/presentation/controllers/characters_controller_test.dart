@@ -1,9 +1,7 @@
 import 'package:characters_app/app/core/error/failure.dart';
+import 'package:characters_app/app/core/models/image_model.dart';
 import 'package:characters_app/app/features/character/data/models/character_model.dart';
-import 'package:characters_app/app/features/character/data/models/comic_model.dart';
-import 'package:characters_app/app/features/character/data/models/comics_model.dart';
 import 'package:characters_app/app/features/character/data/models/response_character_model.dart';
-import 'package:characters_app/app/features/character/data/models/thumbnail_model.dart';
 import 'package:characters_app/app/features/character/domain/usecases/get_characters.dart';
 import 'package:characters_app/app/features/character/presentation/controllers/characters_controller.dart';
 import 'package:dartz/dartz.dart';
@@ -23,23 +21,7 @@ void main() {
   late CharactersController controller;
   late MockGetCharacters mockGetCharacters;
 
-  final tComicsModel = ComicsModel(
-    available: 1,
-    collectionURI:
-        "http://gateway.marvel.com/v1/public/characters/1011334/comics",
-    itemsModel: [
-      ComicModel(
-        resourceURI: "http://gateway.marvel.com/v1/public/comics/21366",
-        name: "Avengers: The Initiative (2007) #14",
-      ),
-      ComicModel(
-        resourceURI: "http://gateway.marvel.com/v1/public/comics/24571",
-        name: "Avengers: The Initiative (2007) #14 (SPOTLIGHT VARIANT)",
-      ),
-    ],
-    returned: 2,
-  );
-  final tThumbnailModel = ThumbnailModel(
+  final tThumbnailModel = ImageModel(
     path: "http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784",
     extension: "jpg",
   );
@@ -48,7 +30,6 @@ void main() {
       id: 1011334,
       name: "3-D Man",
       description: "Test",
-      comicsModel: tComicsModel,
       thumbnailModel: tThumbnailModel,
     ),
   ];

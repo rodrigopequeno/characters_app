@@ -1,15 +1,19 @@
 import '../../../../core/entities/image.dart';
 
-class Character {
+class Comic {
   final int id;
-  final String name;
+  final String title;
+  final String variantDescription;
   final String description;
   final Image thumbnail;
+  final List<Image> images;
 
-  Character({
+  Comic({
     required this.id,
-    required this.name,
+    required this.title,
+    required this.variantDescription,
     required this.description,
     required this.thumbnail,
+    required this.images,
   });
 }
